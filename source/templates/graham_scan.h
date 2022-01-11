@@ -5,32 +5,32 @@
 #ifndef GRAHAM_SCAN_H
 #define GRAHAM_SCAN_H
 #include "list.h"
-#include "point.h"
-template <size_t dimension, class T, size_t max_list_size> class GrahamScan
+#include "point2d.h"
+
+template <class T>
+class GrahamScan
 {
 public:
-	size_t list_index_with_minimal_last_coordinate(List<Point<dimension, T>, max_list_size> & list_of_points)
+	template <size_t max_list_size>
+	size_t list_index_for_point_with_minimal_y_coordinate(List<Point2D<T>, max_list_size> & list_of_points)
 	{
 		size_t index_of_minimum = 0;
-		T minimum = list_of_points.get(0).get_coordinate(dimension-1);
+		auto minimum = list_of_points.get(0).y();
 		for(size_t list_index = 1 ; list_index < max_list_size; ++list_index)
 		{
-			auto current_point = list_of_points.get(list_index);
-			if(current_point.get_coordinate(dimension-1) < minimum)
+			auto current_point_y = list_of_points.get(list_index).y();
+			if(current_point_y < minimum)
 			{
-				minimum = current_point.get_coordinate(dimension-1);
+				minimum = current_point_y;
 				index_of_minimum = list_index;
 				continue;
 			}
 
-			if(current_point.get_coordinate(dimension-1) == minimum)
+			if(current_point_y == minimum)
 			{
-				for(size_t coordinate_index = dimension-2; coordinate_index > 0; --coordinate_index)
+				if(list_of_points.get(list_index).x() < list_of_points.get(index_of_minimum).x())
 				{
-					if (current_point.get_coordinate(coordinate_index) < list_of_points.get(index_of_minimum).get_coordinate(coordinate_index))
-					{
-						index_of_minimum = list_index;
-					}
+					index_of_minimum = list_index;
 				}
 			}
 		}
