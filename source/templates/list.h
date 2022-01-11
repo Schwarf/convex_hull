@@ -16,7 +16,7 @@ public:
 
 	bool add(T element)
 	{
-		if(size_ < max_size_ -1) {
+		if(size_ < max_size_) {
 			elements_[size_] = element;
 			size_++;
 			return true;
